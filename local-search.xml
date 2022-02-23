@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Linux配置python环境</title>
+    <link href="/2022/02/23/Linux%E9%85%8D%E7%BD%AEpython%E7%8E%AF%E5%A2%83/"/>
+    <url>/2022/02/23/Linux%E9%85%8D%E7%BD%AEpython%E7%8E%AF%E5%A2%83/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Linux系统配置pycharm及pytorch心路"><a href="#Linux系统配置pycharm及pytorch心路" class="headerlink" title="Linux系统配置pycharm及pytorch心路"></a>Linux系统配置pycharm及pytorch心路</h1><p>​    最近肝了好几天，在Linux系统上配置了python环境，现将重要步骤记录于此，以便来时能够有迹可循。</p><p>​    首先在官网上下载anaconda</p><p>​    使用如下语句查看CONDA版本：</p><figure class="highlight ebnf"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">nvidia-smi</span><br></code></pre></td></tr></table></figure><p>​    接下来创建一个可以跑机器学习代码的有pytorch的环境，名字就叫做pytorch：</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">conda</span> create -n pytorch python=<span class="hljs-number">3</span>.<span class="hljs-number">9</span><br></code></pre></td></tr></table></figure><p>​    可能还要安装一些东西，一路yes即可</p><p>​    注意一定要先激活环境之后才能安装pytorch：</p><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">conda <span class="hljs-built_in">activate</span> pytorch<br></code></pre></td></tr></table></figure><p>​    相应的去激活语句为</p><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">conda deactivate</span><br></code></pre></td></tr></table></figure><p>​    之后按照官网上的语句来安装pytorch：</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机科学</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>An application of Qt</title>
     <link href="/2022/01/20/An-application-of-Qt/"/>
     <url>/2022/01/20/An-application-of-Qt/</url>
