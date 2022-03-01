@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>pytorch首战——线性网络及其实现</title>
+    <link href="/2022/03/01/pytorch%E9%A6%96%E6%88%98%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/"/>
+    <url>/2022/03/01/pytorch%E9%A6%96%E6%88%98%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="运用pytorch构建一个简单的线性神经网络"><a href="#运用pytorch构建一个简单的线性神经网络" class="headerlink" title="运用pytorch构建一个简单的线性神经网络"></a>运用pytorch构建一个简单的线性神经网络</h1><p>本文记录了一些pytorch的基本操作，实现了一个简答的线性回归，一个softmax分类和一个多层感知机（参照《动手学深度学习pytorch版）</p><h2 id="一-简单线性回归"><a href="#一-简单线性回归" class="headerlink" title="一.简单线性回归"></a>一.简单线性回归</h2><p>通过此练习训练一个能回归到 $$y=x_1w_1+x_2w_2+b$$ 的线性神经网络</p><h3 id="1-数据集的生成"><a href="#1-数据集的生成" class="headerlink" title="1.数据集的生成"></a>1.数据集的生成</h3><figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><pre><code class="hljs python">num_inputs = <span class="hljs-number">2</span><br>num_examples = <span class="hljs-number">1000</span><br>true_w = [<span class="hljs-number">2</span>, -<span class="hljs-number">3.4</span>]<br>true_b = <span class="hljs-number">4.2</span><br>features = torch.randn(num_examples, num_inputs, dtype=torch.float32)  <span class="hljs-comment"># 直接生成相应的1000*2的张量，并规定数据类型</span><br>labels = true_w[<span class="hljs-number">0</span>] * features[:, <span class="hljs-number">0</span>] + true_w[<span class="hljs-number">1</span>] * features[:, <span class="hljs-number">1</span>] + true_b<span class="hljs-comment">#这里用[:]通配指定与每一维相乘得到的还是一个1*1000的张量</span><br>labels += torch.tensor(np.random.normal(<span class="hljs-number">0</span>, <span class="hljs-number">0.01</span>, size=labels.size()), dtype=torch.float32)  <span class="hljs-comment">#加上高斯分布的干扰</span><br><br></code></pre></td></tr></table></figure><h3 id="2-数据集的读取"><a href="#2-数据集的读取" class="headerlink" title="2.数据集的读取"></a>2.数据集的读取</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">data_iter</span>(<span class="hljs-params">batch_size,features,labels</span>):</span><br>    <span class="hljs-comment">#对整个数据集生成一个打乱的下标组，这样才能够产生一个随机的batch</span><br>    num_examples = <span class="hljs-built_in">len</span>(features)<span class="hljs-comment">#对张量对象可以用len()方法</span><br>    indices = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(num_examples))<br>    <span class="hljs-comment">#打乱下表数组</span><br>    random.shuffle(indices)<br>    <span class="hljs-comment">#开始抽签</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,num_examples,batch_size):<br>        j = torch.LongTensor(indices[i:<span class="hljs-built_in">min</span>(i+batch_size)])<span class="hljs-comment">#要取的下标序列，注意最后一个可能不足一个batch的元素个数</span><br>        <span class="hljs-keyword">yield</span> features.index_select(<span class="hljs-number">0</span>,j),labels.index_select(<span class="hljs-number">0</span>,j)<span class="hljs-comment">#实际上是一个生成器，可以源源不断的产生数据，index_select方法中0表示按行索引，1表示按列索引</span><br>    <br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机科学</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>机器学习</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Linux配置python环境</title>
     <link href="/2022/02/23/Linux%E9%85%8D%E7%BD%AEpython%E7%8E%AF%E5%A2%83/"/>
     <url>/2022/02/23/Linux%E9%85%8D%E7%BD%AEpython%E7%8E%AF%E5%A2%83/</url>
