@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/flag.jpg">
+  <link rel="icon" href="/img/flag.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Otsutsuki-orance">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="A Naruto-Themed Data analyzer with GUI1. Introduction​    As the final program of the course problem solving and practice, this project took more time than I have envisaged. But finally all the mandat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="An application of Qt">
+<meta property="og:url" content="http://example.com/2022/01/20/An-application-of-Qt/index.html">
+<meta property="og:site_name" content="愿岁并谢，与长友兮">
+<meta property="og:description" content="A Naruto-Themed Data analyzer with GUI1. Introduction​    As the final program of the course problem solving and practice, this project took more time than I have envisaged. But finally all the mandat">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/01/20/An-application-of-Qt/picture1.png">
+<meta property="og:image" content="http://example.com/2022/01/20/An-application-of-Qt/picture2.png">
+<meta property="og:image" content="http://example.com/2022/01/20/An-application-of-Qt/picture3.png">
+<meta property="og:image" content="http://example.com/2022/01/20/An-application-of-Qt/picture4.png">
+<meta property="og:image" content="http://example.com/2022/01/20/An-application-of-Qt/picture5.png">
+<meta property="article:published_time" content="2022-01-20T09:19:11.000Z">
+<meta property="article:modified_time" content="2022-01-20T13:58:30.363Z">
+<meta property="article:author" content="Otsutsuki-orance">
+<meta property="article:tag" content="编程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2022/01/20/An-application-of-Qt/picture1.png">
+  
+  
+  <title>An application of Qt - 愿岁并谢，与长友兮</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>万里蹀躞，以此为归</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="An application of Qt">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-01-20 17:19" pubdate>
+        January 20, 2022 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      64 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">An application of Qt</h1>
+            
+            <div class="markdown-body">
+              <h1 id="A-Naruto-Themed-Data-analyzer-with-GUI"><a href="#A-Naruto-Themed-Data-analyzer-with-GUI" class="headerlink" title="A Naruto-Themed Data analyzer with GUI"></a>A Naruto-Themed Data analyzer with GUI</h1><h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h3><p>​    As the final program of the course problem solving and practice, this project took more time than I have envisaged. But finally all the mandatory and elective functions are realized, and it’s fairly complete and robust. Furthermore I added a multitude of Naruto-related pictures to make it look better and to make the process more enjoyable holistically. By now it can analyze both users and places by charts or  on the map, and it can also give an access of the similarity between two users or two places concerning on the  spatio-temporal information given.</p>
+<p>​    Generally speaking, the whole project can be divided into two parts, with two mainwindows dealing with the corresponding tasks. The first is the part coping with the data while loading, in which I used <strong>QTextStream</strong> to read the information line by line and stored them in the data structure after pretreatment. It looks like the picture below.</p>
+<img src="/2022/01/20/An-application-of-Qt/picture1.png" srcset="/img/loading.gif" lazyload class="" title="图片1">
+
+<p> The second part is for the series  of tasked based on the data stored after filtration. The user of this UI can push the buttons on the working window demonstrated below.</p>
+<img src="/2022/01/20/An-application-of-Qt/picture2.png" srcset="/img/loading.gif" lazyload class="" title="图片2">
+
+<p>​    Another point worth mentioning is the usage of the class <strong>QThread</strong>. For each task I wrote a class to do the data-dealing work. The object of it will be put into a subthread, and transmit certain data structures back after doing the work . <em>Another method is to put all the tasks into one class named Tasks. This can reduce the number of header files you write, but it may not be so friendly when debugging.</em></p>
+<h3 id="2-Details-of-the-project"><a href="#2-Details-of-the-project" class="headerlink" title="2. Details of the project"></a>2. Details of the project</h3><h4 id="About-data-loading"><a href="#About-data-loading" class="headerlink" title="About data-loading"></a>About data-loading</h4><p>After clicking the button, a filter window will be shown to select the range and field you need. And when the user pushes  the button”选好惹”,the parameters will be recorded simultaneously, and the data will embark to load.</p>
+<p>A class named <strong>loadfile</strong> is used for the part. An object of it will be created and added to a subthread:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//创建子线程对象</span><br>QThread *t=<span class="hljs-keyword">new</span> QThread;<br><span class="hljs-comment">//创建任务类对象</span><br>loadfile * load=<span class="hljs-keyword">new</span> loadfile;<br><span class="hljs-comment">//将任务类对象移动到子线程中</span><br>load-&gt;<span class="hljs-built_in">moveToThread</span>(t);<br></code></pre></td></tr></table></figure>
+
+<p>and a signal will be send so that the object can do its work:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//关联信号函数</span><br><span class="hljs-built_in">connect</span>(<span class="hljs-keyword">this</span>,&amp;MainWindow::loadStart,load,&amp;loadfile::startLoad);<br><span class="hljs-comment">//启动子线程</span><br>t-&gt;<span class="hljs-built_in">start</span>();<br></code></pre></td></tr></table></figure>
+
+<p>During the process, we will also receive the data sent back, so that the ProgressBar can update itself  and the button can be set to be clickable after all the data is successfully loaded:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//接收子线程发送的数据</span><br>demo-&gt;ui-&gt;pushButton-&gt;<span class="hljs-built_in">setDisabled</span>(<span class="hljs-literal">true</span>);<br><span class="hljs-built_in">connect</span>(load,&amp;loadfile::transmitCounter,<span class="hljs-keyword">this</span>,[=](<span class="hljs-keyword">int</span> i)<br>&#123;<br>  pointer-&gt;<span class="hljs-built_in">setValue</span>(i*<span class="hljs-number">100</span>/<span class="hljs-number">1500000</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>finally after all those mentioned above, the ui of my work window will be shown and the user can select the tasks he want:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//切换到工作界面</span><br><span class="hljs-built_in">connect</span>(demo-&gt;ui-&gt;pushButton,&amp;QPushButton::clicked,<span class="hljs-keyword">this</span>,&amp;MainWindow::switchToWorkWindow);<br></code></pre></td></tr></table></figure>
+
+<h4 id="An-example-of-the-details-in-the-basic-functions"><a href="#An-example-of-the-details-in-the-basic-functions" class="headerlink" title="An example of the details in the basic functions"></a>An example of the details in the basic functions</h4><p>​    <em>for every function, a corresponding task class as long as a ui for parameters selection is written. A better way method may be that we can put all the ui we need into one single window, and use the class <strong>QStackedWidgets</strong> to switch between the pages. But as I have gone far on my way, I didn’t consider changing the structure.</em></p>
+<p>​    Let’s take the function of comparing two places as an example, others can be realized in a similar way.</p>
+<p>​    After the task class(named <strong>visitcmp</strong> in my case)has received the data, it will do its work and generate the objects of <strong>QPieSeries</strong> and <strong>QLineSeries</strong> :</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//饼图</span><br>QPieSeries *pieserie = <span class="hljs-keyword">new</span> <span class="hljs-built_in">QPieSeries</span>();<br>    pieserie-&gt;<span class="hljs-built_in">append</span>(QString::<span class="hljs-built_in">number</span>(loc1),loc1visitor);<br>    pieserie-&gt;<span class="hljs-built_in">append</span>(QString::<span class="hljs-built_in">number</span>(loc2),loc2visitor);<br><span class="hljs-comment">//线图</span><br>QLineSeries * trackseries1=<span class="hljs-keyword">new</span> QLineSeries;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;a.<span class="hljs-built_in">length</span>();i++)<br>    &#123;<br>        <span class="hljs-keyword">if</span>(a[i].totalvisit!=<span class="hljs-number">0</span>)<br>        &#123;<br>            trackseries1-&gt;<span class="hljs-built_in">append</span>(<span class="hljs-built_in">QDateTime</span>(a[i].date).<span class="hljs-built_in">toMSecsSinceEpoch</span>(),a[i].totalvisit);<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>and send the series back using signals in Qt:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">emit <span class="hljs-title">sendData</span><span class="hljs-params">(pieserie,trackseries1,trackseries2)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>after that our workwindow will receive the series and use them to draw the picture we want.</p>
+<p>But I soon discovered that as there is an enormous number of data, the line on the picture is so thick and tight that the picture can’t be uglier and it can not be adjusted by the events of my mouse:</p>
+<img src="/2022/01/20/An-application-of-Qt/picture3.png" srcset="/img/loading.gif" lazyload class="" title="图片3">
+
+<p><em>To partly solve the problem, I rewrite the class  <strong>QChartView</strong> . A class named <strong>ChartView</strong>  inherited the original class,  in which I rewrite the mouse events</em></p>
+<p>In mouse move events, the start and end coordinates of the mouse is recorded, and the graph is moved along with the vector we get through the mouse action:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++">QPoint moveVec=curPos-m_last;<span class="hljs-comment">//移动向量</span><br>       m_last=curPos;<span class="hljs-comment">//更新鼠标的现在位置</span><br>       <span class="hljs-keyword">if</span>(!m_rangesaved)<br>       &#123;<br>           m_rangesaved=<span class="hljs-literal">true</span>;<br>           <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">saveAxisRange</span>();<br>       &#125;<br>       <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">chart</span>()-&gt;<span class="hljs-built_in">scroll</span>(-moveVec.<span class="hljs-built_in">x</span>(),moveVec.<span class="hljs-built_in">y</span>());<span class="hljs-comment">//实现拖动鼠标的移动功能</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>In wheel event I used <strong>zoomIn</strong> and <strong>zoomOut</strong> to make the picture larger or smaller according to the wheel:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">const</span> qreal fractor=<span class="hljs-number">1.2</span>;<br>    <span class="hljs-keyword">if</span>(event-&gt;<span class="hljs-built_in">delta</span>()&gt;<span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">chart</span>()-&gt;<span class="hljs-built_in">zoom</span>(fractor);<br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">chart</span>()-&gt;<span class="hljs-built_in">zoom</span>(<span class="hljs-number">1</span>/fractor);<br></code></pre></td></tr></table></figure>
+
+<p>which yields:</p>
+<img src="/2022/01/20/An-application-of-Qt/picture4.png" srcset="/img/loading.gif" lazyload class="" title="图片4">
+
+<p>In addition to my method of rewritting the <strong>QChartView</strong> class , the class <strong>QCustomePlot</strong> may also be a powerful tool.</p>
+<h4 id="About-the-use-of-map"><a href="#About-the-use-of-map" class="headerlink" title="About the use of map"></a>About the use of map</h4><p>​    Adding a map is probably the most difficult part. <em>First we need to write a <strong>QML file</strong>,which import a map from the Internet using the element <strong>Plugin</strong></em>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//接口</span><br>Plugin&#123;<br>        <span class="hljs-attr">id</span>:mapPlugin<br>        <span class="hljs-attr">name</span>:<span class="hljs-string">&quot;esri&quot;</span><span class="hljs-comment">//就这个显示的出来</span><br>    &#125;<br><span class="hljs-comment">//地图</span><br> <span class="hljs-built_in">Map</span>&#123;<br>        <span class="hljs-attr">id</span>:map<br>        <span class="hljs-attr">visible</span>: <span class="hljs-literal">true</span><br>        anchors.fill:parent<br>        <span class="hljs-attr">plugin</span>:mapPlugin<br>        <span class="hljs-attr">zoomLevel</span>: (maximumZoomLevel-minimumZoomLevel)*<span class="hljs-number">0.9</span><br><br>        <span class="hljs-attr">center</span>:QtPositioning.coordinate(<span class="hljs-number">30.67</span>, <span class="hljs-number">104.05</span>)<span class="hljs-comment">//我大成都的坐标！</span><br>        ListModel&#123;<br>            <span class="hljs-attr">id</span>:currentLoc<br>        &#125;<br>        Slider&#123;<br>            <span class="hljs-attr">id</span>:zoom<br>            <span class="hljs-attr">value</span>:(map.maximumZoomLevel-map.minimumZoomLevel)/<span class="hljs-number">2</span><br>            <span class="hljs-attr">from</span>:map.minimumZoomLevel<br>            <span class="hljs-attr">to</span>:map.maximumZoomLevel<br>            Text &#123;<br>                <span class="hljs-attr">id</span>: zoomAdjust<br>                <span class="hljs-attr">text</span>: qsTr(<span class="hljs-string">&quot;zoomAdjust&quot;</span>)<br>            &#125;<br>            <span class="hljs-attr">onValueChanged</span>: map.zoomLevel=zoom.value<br>        &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+
+<p>​    in it <strong>Sliders</strong> are applied to adjust the view, (the tilt angle ,zoomin and zoomout ,rotation,ect.).</p>
+<p>​    Several mapItemViews are added too, and each of them contains a <strong>Model</strong> that can show the coordinate of a certain people:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs javascript">MapItemView&#123;<br>            <span class="hljs-attr">id</span>:routeDraw<br>            <span class="hljs-attr">model</span>:currentRoute<br>            <span class="hljs-attr">delegate</span>: trackDrawRoute<br>        &#125;<br>        Component&#123;<br>            <span class="hljs-attr">id</span>:trackDrawRoute<br>            MapItemGroup&#123;<br>                MapPolyline&#123;<br>                    <span class="hljs-attr">id</span>:mapRouteLine<br>                    line.width: <span class="hljs-number">1</span><br>                    line.color: <span class="hljs-string">&quot;blue&quot;</span><br>                    <span class="hljs-attr">path</span>:[origin,destination]<br>                    <span class="hljs-attr">visible</span>: isVisible<br>                &#125;<br>            &#125;<br>        &#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>​    As a single people may go to many placed adjacent to each other, showing all the points in one go may be too ugly. <em>I added a Timer, and after an interval of 500ms, a function is called and a new point will be set visible.</em></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//计时器类 </span><br>Timer&#123;<br>               <span class="hljs-attr">id</span>:animationTimer<br>               <span class="hljs-attr">interval</span>:<span class="hljs-number">500</span><br>               <span class="hljs-attr">running</span>: <span class="hljs-literal">true</span><br>               <span class="hljs-attr">repeat</span>: <span class="hljs-literal">true</span><br>               <span class="hljs-attr">onTriggered</span>: &#123;<br>                   routeDraw.triggerRouteDemo()<br>                           &#125;<br>           &#125;<br><span class="hljs-comment">//相应函数</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">triggerRouteDemo</span>(<span class="hljs-params"></span>)</span>&#123;<br>                <span class="hljs-keyword">var</span> lenth= currentRoute.count<br>                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>;i&lt;lenth;i++)<br>                &#123;<br>                    <span class="hljs-keyword">var</span> data=currentRoute.get(i)<br>                    <span class="hljs-keyword">if</span>(data.isVisible===<span class="hljs-literal">false</span>)<br>                    &#123;<br>                        currentRoute.setProperty(i,<span class="hljs-string">&quot;isVisible&quot;</span>,<span class="hljs-literal">true</span>)<br>                        <span class="hljs-keyword">break</span><br>                    &#125;<br><br>                &#125;<br>            &#125;<br></code></pre></td></tr></table></figure>
+
+<p>​    Also I customized the marker:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs javascript">MapQuickItem&#123;<br>               <span class="hljs-attr">id</span>:userLocMaker<br>               <span class="hljs-attr">sourceItem</span>: Image&#123;<br>                   <span class="hljs-attr">id</span>: image<br>                   <span class="hljs-attr">source</span>: <span class="hljs-string">&quot;qrc:/img/sources/kai.png&quot;</span><span class="hljs-comment">//设定成自己的图片</span><br>                   <span class="hljs-attr">width</span>:<span class="hljs-number">28</span><br>                   <span class="hljs-attr">height</span>:<span class="hljs-number">28</span><br>                   &#125;<br>    <span class="hljs-comment">//从Model中取得坐标</span><br>             <span class="hljs-attr">coordinate</span>: QtPositioning.coordinate(location.latitude,location.longitude)<br>                       anchorPoint.x: image.width/<span class="hljs-number">2</span><br>                       anchorPoint.y: image.height<br>                       <span class="hljs-attr">visible</span>: isVisible<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<p>and used <strong>QMetaObject::invokeMethod</strong> to transmit data from QT to QML:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">QMetaObject::<span class="hljs-built_in">invokeMethod</span>(proot,<span class="hljs-string">&quot;ready&quot;</span>,<span class="hljs-built_in">Q_ARG</span>(QVariant,manager-&gt;m_locList.<span class="hljs-built_in">back</span>()));<br></code></pre></td></tr></table></figure>
+
+<img src="/2022/01/20/An-application-of-Qt/picture5.png" srcset="/img/loading.gif" lazyload class="" title="图片5">
+
+<h3 id="3-Results-of-the-project"><a href="#3-Results-of-the-project" class="headerlink" title="3. Results of the project"></a>3. Results of the project</h3><p>​    In general ,this GUI has realized all the functions required. Many kinds of graphs are applied, and It can show a map and give an report of two persons.</p>
+<p>​    But some graph is still ugly, and the windows and buttons can still be optimized. I will not improved after 3 weeks spent on it for now because of the final tests. But I believe I will:</p>
+<ul>
+<li>reduce the number of UIs, make them as a whole and more beautiful.</li>
+<li>improve the legends on each graph, and try customeplot to draw pictures.</li>
+<li>simplify the code and improve the complexity.</li>
+</ul>
+<h3 id="4-Further-discussions"><a href="#4-Further-discussions" class="headerlink" title="4.  Further discussions"></a>4.  Further discussions</h3><div class="code-wrapper"><pre><code class="hljs"> In the part of data deep mining, I divided American land into 9 part according to **百度**, and analyze the similarity of two persons according to their times of visit in the 9 parts. While I use the time information to analyze the similarity of two places. That is, if they are visited by a similar number of people in a single day, we can decide how similar are they.
+</code></pre></div>
+<p>​    From the results, I suppose that maybe a certain group of people are friends or families, maybe we can do further analyze to decide where their home probably are. In another aspects, maybe some places are places of interests, so they are visited by many people in holidays.</p>
+<p>​    Further work can be done to analyze these factors.</p>
+<p>——-Otsutsuki_Orance </p>
+<p>2021.12.27</p>
+<p>​                            </p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6/">计算机科学</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/23/Linux%E9%85%8D%E7%BD%AEpython%E7%8E%AF%E5%A2%83/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux配置python环境</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/20/About-Dune/">
+                        <span class="hidden-mobile">浅谈《沙丘》</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Otsutsuki_Orance</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>humihuadecheng@sjtu.edu.cn</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

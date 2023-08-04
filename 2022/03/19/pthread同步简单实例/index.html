@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/flag.jpg">
+  <link rel="icon" href="/img/flag.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Otsutsuki-orance">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="pthread同步实例：线程池实现和producer_consumer问题解决  一.线程池的实现在本实例中，我们创建并管理一个线程池，其synchronization实现是用pthread和POSIX.用户可以用pool_init()来初始化该线程池，并调用pool_submit(void(*somefunction)(void *p), void *p)向其中提交任务。在最后用pool_shu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pthread同步简单实例">
+<meta property="og:url" content="http://example.com/2022/03/19/pthread%E5%90%8C%E6%AD%A5%E7%AE%80%E5%8D%95%E5%AE%9E%E4%BE%8B/index.html">
+<meta property="og:site_name" content="愿岁并谢，与长友兮">
+<meta property="og:description" content="pthread同步实例：线程池实现和producer_consumer问题解决  一.线程池的实现在本实例中，我们创建并管理一个线程池，其synchronization实现是用pthread和POSIX.用户可以用pool_init()来初始化该线程池，并调用pool_submit(void(*somefunction)(void *p), void *p)向其中提交任务。在最后用pool_shu">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/03/19/pthread%E5%90%8C%E6%AD%A5%E7%AE%80%E5%8D%95%E5%AE%9E%E4%BE%8B/picture.jpeg">
+<meta property="og:image" content="http://example.com/2022/03/19/pthread%E5%90%8C%E6%AD%A5%E7%AE%80%E5%8D%95%E5%AE%9E%E4%BE%8B/picture1.png">
+<meta property="article:published_time" content="2022-03-19T08:33:30.000Z">
+<meta property="article:modified_time" content="2022-03-19T09:29:02.189Z">
+<meta property="article:author" content="Otsutsuki-orance">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2022/03/19/pthread%E5%90%8C%E6%AD%A5%E7%AE%80%E5%8D%95%E5%AE%9E%E4%BE%8B/picture.jpeg">
+  
+  
+  <title>pthread同步简单实例 - 愿岁并谢，与长友兮</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>万里蹀躞，以此为归</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="pthread同步简单实例">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-19 16:33" pubdate>
+        March 19, 2022 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      9.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      80 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">pthread同步简单实例</h1>
+            
+            <div class="markdown-body">
+              <h1 id="pthread同步实例：线程池实现和producer-consumer问题解决"><a href="#pthread同步实例：线程池实现和producer-consumer问题解决" class="headerlink" title="pthread同步实例：线程池实现和producer_consumer问题解决"></a>pthread同步实例：线程池实现和producer_consumer问题解决</h1><img src="/2022/03/19/pthread%E5%90%8C%E6%AD%A5%E7%AE%80%E5%8D%95%E5%AE%9E%E4%BE%8B/picture.jpeg" srcset="/img/loading.gif" lazyload class="">
+
+<h2 id="一-线程池的实现"><a href="#一-线程池的实现" class="headerlink" title="一.线程池的实现"></a>一.线程池的实现</h2><p>在本实例中，我们创建并管理一个线程池，其synchronization实现是用pthread和POSIX.用户可以用pool_init()来初始化该线程池，并调用pool_submit(void(*somefunction)(void *p), void *p)向其中提交任务。在最后用pool_shutdown()将线程池关闭</p>
+<h3 id="1-sem-信号量框架"><a href="#1-sem-信号量框架" class="headerlink" title="1.sem_信号量框架"></a>1.sem_信号量框架</h3><p>POSIX下定义的信号量定义在头文件&lt;semaphore.h&gt;中。在本项目中我都使用了未命名的信号量，其使用方法为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">sem_t</span> sem;<span class="hljs-comment">//声明一个信号量</span><br>sem_init(&amp;sem,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>);<span class="hljs-comment">//信号量初始化，其中0表示该信号量只能在对应的线程中使用，若使用一个非0的值我们就可以在不同的线程中共用该信号量了。</span><br><br>sem_wait(&amp;sem);<span class="hljs-comment">//等待直到该信号量的值大于0，即有空余信号可以使用</span><br><span class="hljs-comment">/*危险区*/</span><br>sem_post(&amp;sem);释放该信号量<br> <br><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-mutex互斥锁框架"><a href="#2-mutex互斥锁框架" class="headerlink" title="2.mutex互斥锁框架"></a>2.mutex互斥锁框架</h3><p>pthread使用pthread_mutex_t 数据类型来定义互斥锁。其使用方法为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">pthread_mutex_t</span> mutex;<span class="hljs-comment">//定义一个互斥锁</span><br>pthread_mutex_init(&amp;mutex,<span class="hljs-literal">NULL</span>);<span class="hljs-comment">//初始化，其中NULL表示使用默认属性初始化</span><br>pthread_mutex_lock(&amp;mutex);<span class="hljs-comment">//加锁</span><br><span class="hljs-comment">/*危险区*/</span><br>pthread_mutex_unlock(&amp;mutex);<span class="hljs-comment">//解锁</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-线程池框架"><a href="#3-线程池框架" class="headerlink" title="3.线程池框架"></a>3.线程池框架</h3><p>该说不说，这个线程池的框架还是比较巧妙的。<br>定义任务类：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> </span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">void</span> (*function)(<span class="hljs-keyword">void</span> *p);<br>    <span class="hljs-keyword">void</span> *data;<br>&#125;<br>task;<br></code></pre></td></tr></table></figure>
+
+<p>基于该任务类定义了一个任务队列，一个线程队列，一个指示队列，用来指示线程池中线程的使用情况。<br>pool_submit()函数将新的任务提交到任务队列中，同时查找是否有可用的线程，如果有，那么创建线程，新建的线程的任务函数是worker(),该函数从任务队列中取出队首的元素，执行其任务类的任务。<br>当然，相应的enqueue()和dequeue()函数就用来实现往任务队列中的插入和删除。这里我们还是用数组来存因为玩数组玩的比较熟。但是我们数组的最大的容量如果不够，将阻止该插入，并且报错。</p>
+<h3 id="4-代码实现："><a href="#4-代码实现：" class="headerlink" title="4.代码实现："></a>4.代码实现：</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Implementation of thread pool.</span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;semaphore.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;threadpool.h&quot;</span></span><br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> QUEUE_SIZE 10</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> NUMBER_OF_THREADS 3</span><br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> True 1</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> False 0</span><br><br><span class="hljs-comment">// this represents work that has to be </span><br><span class="hljs-comment">// completed by a thread in the pool</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> </span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">void</span> (*function)(<span class="hljs-keyword">void</span> *p);<br>    <span class="hljs-keyword">void</span> *data;<br>&#125;<br>task;<br><br>task taskqueue[QUEUE_SIZE];<br><span class="hljs-keyword">int</span> cuttasknum=<span class="hljs-number">0</span>;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">lenth</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> cuttasknum;<br>&#125;<br><br><span class="hljs-keyword">pthread_mutex_t</span> qlock;<br><span class="hljs-keyword">sem_t</span> tsem;<br><span class="hljs-comment">// the work queue</span><br>task worktodo;<br><br><span class="hljs-comment">// the worker bee</span><br><span class="hljs-keyword">pthread_t</span> bee;<br><br><span class="hljs-comment">// insert a task into the queue</span><br><span class="hljs-comment">//TODO</span><br><span class="hljs-comment">// returns 0 if successful or 1 otherwise, </span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">enqueue</span><span class="hljs-params">(task t)</span> </span><br><span class="hljs-function"></span>&#123;<br>    pthread_mutex_lock(&amp;qlock);<br>    <span class="hljs-keyword">if</span>(lenth()&gt;=QUEUE_SIZE)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;fail to enqueue\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>    <br>    taskqueue[cuttasknum]=t;<br>    ++cuttasknum;<br>    pthread_mutex_unlock(&amp;qlock);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">// remove a task from the queue</span><br><span class="hljs-comment">//TODO</span><br><span class="hljs-function">task <span class="hljs-title">dequeue</span><span class="hljs-params">()</span> </span><br><span class="hljs-function"></span>&#123; <br>    pthread_mutex_lock(&amp;qlock);<br>    <span class="hljs-keyword">if</span>(lenth()&lt;<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;oops,an error happens during dequeue\n&quot;</span>);<br>        worktodo.data=worktodo.function=<span class="hljs-literal">NULL</span>;<br>    &#125;<br>   <br>    worktodo=taskqueue[<span class="hljs-number">0</span>];<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>;i&lt;lenth();i++)<br>    &#123;<br>        taskqueue[i<span class="hljs-number">-1</span>]=taskqueue[i];<br>    &#125;<br>    --cuttasknum;<br>    pthread_mutex_unlock(&amp;qlock);<br>    <span class="hljs-keyword">return</span> worktodo;<br>&#125;<br><br><span class="hljs-comment">// the worker thread in the thread pool</span><br><span class="hljs-keyword">int</span> state[NUMBER_OF_THREADS];<br><span class="hljs-keyword">pthread_t</span> mythread[NUMBER_OF_THREADS];<br><span class="hljs-comment">// this function is the function called by the working thread in pthread_create()</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">worker</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *param)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">int</span> *a=(<span class="hljs-keyword">int</span> *)param;<br>    <span class="hljs-keyword">int</span> index=*a;<br>    <span class="hljs-comment">//state[index]=False;//busy</span><br>   worktodo=dequeue();<br>    <span class="hljs-comment">// execute the task</span><br>    <span class="hljs-keyword">if</span>(worktodo.data!=<span class="hljs-literal">NULL</span>)<br>    &#123;<br>   execute(worktodo.function, worktodo.data);<br>    state[index]=True;<span class="hljs-comment">//availiable</span><br>    &#125;<br>    sem_post(&amp;tsem);<br>    pthread_exit(<span class="hljs-number">0</span>);<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Executes the task provided to the thread pool</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">(<span class="hljs-keyword">void</span> (*somefunction)(<span class="hljs-keyword">void</span> *p), <span class="hljs-keyword">void</span> *p)</span></span><br><span class="hljs-function"></span>&#123;<br>    (*somefunction)(p);<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Submits work to the pool.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pool_submit</span><span class="hljs-params">(<span class="hljs-keyword">void</span> (*somefunction)(<span class="hljs-keyword">void</span> *p), <span class="hljs-keyword">void</span> *p)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">//sleep(1);</span><br>    sem_wait(&amp;tsem);<br>    worktodo.function = somefunction;<br>    worktodo.data = p;<br>    <span class="hljs-keyword">if</span>(enqueue(worktodo)!=<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;nani?\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>    <br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;NUMBER_OF_THREADS;i++)<br>    &#123;<br>        <span class="hljs-keyword">if</span>(state[i]==True)<br>        &#123;<br>            state[i]=False;<span class="hljs-comment">//set to busy</span><br>            pthread_create(&amp;mythread[i],<span class="hljs-literal">NULL</span>,&amp;worker,&amp;i);<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-comment">// initialize the thread pool</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">pool_init</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span><br><span class="hljs-function"></span>&#123;<br>    cuttasknum=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;NUMBER_OF_THREADS;i++)<br>    &#123;<br>        state[i]=True;<br>    &#125;<br>    sem_init(&amp;tsem,<span class="hljs-number">0</span>,NUMBER_OF_THREADS);<br>    pthread_mutex_init(&amp;qlock,<span class="hljs-literal">NULL</span>);<br>&#125;<br><br><span class="hljs-comment">// shutdown the thread pool</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">pool_shutdown</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;NUMBER_OF_THREADS;i++)<br>    pthread_join(mythread[i],<span class="hljs-literal">NULL</span>);<br>    pthread_mutex_destroy(&amp;qlock);<br>    sem_destroy(&amp;tsem);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-测试"><a href="#5-测试" class="headerlink" title="5.测试"></a>5.测试</h3><p>基于示例代码，我们又往里面填了三个任务，使得任务总量能够大于线程池提供的线程数目以测试我们的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c">work2.a=<span class="hljs-number">6</span>;<br>   work2.b=<span class="hljs-number">11</span>;<br>   work3.a=<span class="hljs-number">7</span>;<br>   work3.b=<span class="hljs-number">12</span>;<br>   work4.a=<span class="hljs-number">8</span>;<br>   work4.b=<span class="hljs-number">13</span>;<br>   pool_submit(&amp;add,&amp;work2);<br> <br>   pool_submit(&amp;add,&amp;work3);<br><br>   pool_submit(&amp;add,&amp;work4);<br><br></code></pre></td></tr></table></figure>
+
+<p>测试结果如图所示：</p>
+<img src="/2022/03/19/pthread%E5%90%8C%E6%AD%A5%E7%AE%80%E5%8D%95%E5%AE%9E%E4%BE%8B/picture1.png" srcset="/img/loading.gif" lazyload class="" title="测试结果">
+
+<h2 id="二-producer-consumer问题解决"><a href="#二-producer-consumer问题解决" class="headerlink" title="二.producer_consumer问题解决"></a>二.producer_consumer问题解决</h2><h3 id="1-producer和consumer实现"><a href="#1-producer和consumer实现" class="headerlink" title="1.producer和consumer实现"></a>1.producer和consumer实现</h3><p>同步领域的经典问题，在这个项目中我们创建了不少的consumer和producer，他们要么安静的睡觉，要么往缓冲区里存东西/写东西。<br>存东西的insert_item()函数就是往一个线性表中存值，我使用了一个cutindex下表指针来指示下一个元素应该被插入的位置。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">insert_item</span><span class="hljs-params">(buffer_item item)</span> </span><br><span class="hljs-function"></span>&#123; <br>    <span class="hljs-keyword">if</span>(cutindex&gt;=BUFFER_SIZE)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;oops!insert failed\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125; <br>    pthread_mutex_lock(&amp;mutex);<br>    buffer[cutindex]=item;<br>    ++cutindex;<br>    pthread_mutex_unlock(&amp;mutex);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><span class="hljs-comment">/* insert item into buffer</span><br><span class="hljs-comment">return 0 if successful, otherwise</span><br><span class="hljs-comment">return -1 indicating an error condition */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中修改buffer的行为属于危险行为，所以给他加了一把互斥锁。<br>如果consumer只消耗最后一个元素就太逊了，我们让他随机消耗一个元素：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">remove_item</span><span class="hljs-params">(buffer_item *item)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span>(cutindex&lt;<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;oops,fail to insert\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    pthread_mutex_lock(&amp;mutex);<br>    <span class="hljs-keyword">int</span> index=(<span class="hljs-keyword">int</span>)(rand()%cutindex);<span class="hljs-comment">//要消耗的元素的位置</span><br>    (*item)=buffer[index];<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=index+<span class="hljs-number">1</span>;i&lt;cutindex<span class="hljs-number">-1</span>;i++)<br>    &#123;<br>        buffer[i]=buffer[i+<span class="hljs-number">1</span>];<br>    &#125;<br>    buffer[cutindex<span class="hljs-number">-1</span>]=NOITEM;<br>    --cutindex;<br>    pthread_mutex_unlock(&amp;mutex);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><span class="hljs-comment">/* remove an object from buffer</span><br><span class="hljs-comment">placing it in item</span><br><span class="hljs-comment">return 0 if successful, otherwise</span><br><span class="hljs-comment">return -1 indicating an error condition */</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>这样一来我们的producer和consumer只需要在睡醒的时候在自己的任务函数里面调用以上两个函数就可以实现插入和删除了。注意调用的时候使用了两个信号量empty和full，其具体用法见恐龙书7.1节。其次这应该是一个死循环，由main函数觉得应该终止的时候加以停止和回收线程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">producer</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *param)</span> </span>&#123;<br>buffer_item item;<br><span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br><span class="hljs-comment">/* sleep for a random period of time */</span><br>&#123;<br>    <span class="hljs-keyword">int</span> sleep_period = rand()%<span class="hljs-number">4</span>;<br>    sleep(sleep_period);<br><span class="hljs-comment">/* generate a random number */</span><br>    sem_wait(&amp;empty);<br>    item = rand();<br>    <span class="hljs-keyword">if</span> (insert_item(item))<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;report error condition&quot;</span>);<br>    <span class="hljs-keyword">else</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;producer produced %d\n&quot;</span>,item);<br>    sem_post(&amp;full);<br>&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">consumer</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *param)</span> </span>&#123;<br>buffer_item item;<br><span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br><span class="hljs-comment">/* sleep for a random period of time */</span><br>&#123;<br>    <span class="hljs-keyword">int</span> sleep_period = rand()%<span class="hljs-number">4</span>;<br>    sleep(sleep_period);<br>    sem_wait(&amp;full);<br>    <span class="hljs-keyword">if</span> (remove_item(&amp;item))<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;report error condition&quot;</span>);<br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;consumer consumed %d\n&quot;</span>,item);<br>    sem_post(&amp;empty);<br>&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-比较有意思的main函数"><a href="#2-比较有意思的main函数" class="headerlink" title="2.比较有意思的main函数"></a>2.比较有意思的main函数</h3><p>首先这个main函数在命令行里传了三个参数——要睡多久？有几个producer？有几个consumer？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> sleeptime = atoi(argv[<span class="hljs-number">1</span>]);<br>    <span class="hljs-keyword">int</span> producernum = atoi(argv[<span class="hljs-number">2</span>]);<br>    <span class="hljs-keyword">int</span> consumernum = atoi(argv[<span class="hljs-number">3</span>]);<span class="hljs-comment">//arg[0]是文件名，参数从1开始</span><br>    ……<br></code></pre></td></tr></table></figure>
+
+<p>然后在做完初始化之后（初始化包括创建线程和那些sem和mutex的初始化和变量定义那一趟），休眠一会，任由线程来自己玩。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">sleep(sleeptime);<br></code></pre></td></tr></table></figure>
+
+<p>最后料理后事，注意要使用pthread_cancel()而不是pthread_join()来终止线程，不然停不下来。</p>
+<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3.代码实现"></a>3.代码实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;semaphore.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;buffer.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> NOITEM 0</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> true 1</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> false 0</span><br><span class="hljs-comment">/* the buffer */</span><br><span class="hljs-keyword">sem_t</span> empty,full;<br><span class="hljs-keyword">pthread_mutex_t</span> mutex;<br>buffer_item buffer[BUFFER_SIZE];<br><span class="hljs-keyword">int</span> cutindex=<span class="hljs-number">0</span>;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">insert_item</span><span class="hljs-params">(buffer_item item)</span> </span><br><span class="hljs-function"></span>&#123; <br>   <br>    <span class="hljs-keyword">if</span>(cutindex&gt;=BUFFER_SIZE)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;oops!insert failed\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125; <br>    pthread_mutex_lock(&amp;mutex);<br>    buffer[cutindex]=item;<br>    ++cutindex;<br>    pthread_mutex_unlock(&amp;mutex);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><br><span class="hljs-comment">/* insert item into buffer</span><br><span class="hljs-comment">return 0 if successful, otherwise</span><br><span class="hljs-comment">return -1 indicating an error condition */</span><br><br><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">remove_item</span><span class="hljs-params">(buffer_item *item)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span>(cutindex&lt;<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;oops,fail to insert\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    pthread_mutex_lock(&amp;mutex);<br>    <span class="hljs-keyword">int</span> index=(<span class="hljs-keyword">int</span>)(rand()%cutindex);<br>    (*item)=buffer[index];<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=index+<span class="hljs-number">1</span>;i&lt;cutindex<span class="hljs-number">-1</span>;i++)<br>    &#123;<br>        buffer[i]=buffer[i+<span class="hljs-number">1</span>];<br>    &#125;<br>    buffer[cutindex<span class="hljs-number">-1</span>]=NOITEM;<br>    --cutindex;<br>    pthread_mutex_unlock(&amp;mutex);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><span class="hljs-comment">/* remove an object from buffer</span><br><span class="hljs-comment">placing it in item</span><br><span class="hljs-comment">return 0 if successful, otherwise</span><br><span class="hljs-comment">return -1 indicating an error condition */</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">producer</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *param)</span> </span>&#123;<br>buffer_item item;<br><span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br><span class="hljs-comment">/* sleep for a random period of time */</span><br>&#123;<br>    <span class="hljs-keyword">int</span> sleep_period = rand()%<span class="hljs-number">4</span>;<br>    sleep(sleep_period);<br><span class="hljs-comment">/* generate a random number */</span><br>    sem_wait(&amp;empty);<br>    item = rand();<br>    <span class="hljs-keyword">if</span> (insert_item(item))<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;report error condition&quot;</span>);<br>    <span class="hljs-keyword">else</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;producer produced %d\n&quot;</span>,item);<br>    sem_post(&amp;full);<br>&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">consumer</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *param)</span> </span>&#123;<br>buffer_item item;<br><span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br><span class="hljs-comment">/* sleep for a random period of time */</span><br>&#123;<br>    <span class="hljs-keyword">int</span> sleep_period = rand()%<span class="hljs-number">4</span>;<br>    sleep(sleep_period);<br>    sem_wait(&amp;full);<br>    <span class="hljs-keyword">if</span> (remove_item(&amp;item))<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;report error condition&quot;</span>);<br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;consumer consumed %d\n&quot;</span>,item);<br>    sem_post(&amp;empty);<br>&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> sleeptime = atoi(argv[<span class="hljs-number">1</span>]);<br>    <span class="hljs-keyword">int</span> producernum = atoi(argv[<span class="hljs-number">2</span>]);<br>    <span class="hljs-keyword">int</span> consumernum = atoi(argv[<span class="hljs-number">3</span>]);<br>    <span class="hljs-comment">//initialization</span><br>    pthread_mutex_init(&amp;mutex,<span class="hljs-literal">NULL</span>);<br>    sem_init(&amp;empty,<span class="hljs-number">0</span>,BUFFER_SIZE);<br>    sem_init(&amp;full,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);<br><br>    <span class="hljs-keyword">pthread_t</span> producer_threads[producernum];<br>    <span class="hljs-keyword">pthread_t</span> consumer_threads[consumernum];<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;producernum;i++)<br>    &#123;<br>        pthread_create(&amp;producer_threads[i],<span class="hljs-literal">NULL</span>,producer,<span class="hljs-literal">NULL</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;consumernum;i++)<br>    &#123;<br>        pthread_create(&amp;consumer_threads[i],<span class="hljs-literal">NULL</span>,consumer,<span class="hljs-literal">NULL</span>);<br>    &#125;<br>    <span class="hljs-comment">//sleep</span><br>    sleep(sleeptime);<br>    <span class="hljs-comment">//exit</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;producernum;i++)<br>    &#123;<br>        <span class="hljs-comment">//pthread_join(producer_threads[i],NULL);</span><br>        pthread_cancel(producer_threads[i]);<br>    &#125;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;consumernum;i++)<br>    &#123;<br>       <span class="hljs-comment">// pthread_join(consumer_threads[i],NULL);</span><br>       pthread_cancel(consumer_threads[i]);<br>    &#125;<br>    sem_destroy(&amp;empty);<br>    sem_destroy(&amp;full);<br>    pthread_mutex_destroy(&amp;mutex);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><br><span class="hljs-comment">/* 1. Get command line arguments argv[1],argv[2],argv[3] */</span><br><span class="hljs-comment">/* 2. Initialize buffer */</span><br><span class="hljs-comment">/* 3. Create producer thread(s) */</span><br><span class="hljs-comment">/* 4. Create consumer thread(s) */</span><br><span class="hljs-comment">/* 5. Sleep */</span><br><span class="hljs-comment">/* 6. Exit */</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6/">计算机科学</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/20/%E9%93%B6%E8%A1%8C%E5%AE%B6%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E8%A7%A3%E5%86%B3/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">银行家问题及其解决</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/13/%E7%94%A8C%E5%92%8CJava%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+                        <span class="hidden-mobile">用C和Java实现简单多线程</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Otsutsuki_Orance</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>humihuadecheng@sjtu.edu.cn</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

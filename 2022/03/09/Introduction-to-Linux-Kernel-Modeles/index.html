@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/flag.jpg">
+  <link rel="icon" href="/img/flag.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Otsutsuki-orance">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux 模块编写实践在Linux虚拟机上编写一个简单的模块并加载到内存中。之所以不用双系统是怕bug直接让系统崩溃 一.准备工作首先采用如下语句查看内核版本： 1uname -a  我的得到：  之后要建立目录树，其语句为： 1sudo apt-get install linux-headers-&lt;Linux内核版本号&gt;  二.编写Makefile文件Makefile文件可以让我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to Linux Kernel Modeles">
+<meta property="og:url" content="http://example.com/2022/03/09/Introduction-to-Linux-Kernel-Modeles/index.html">
+<meta property="og:site_name" content="愿岁并谢，与长友兮">
+<meta property="og:description" content="Linux 模块编写实践在Linux虚拟机上编写一个简单的模块并加载到内存中。之所以不用双系统是怕bug直接让系统崩溃 一.准备工作首先采用如下语句查看内核版本： 1uname -a  我的得到：  之后要建立目录树，其语句为： 1sudo apt-get install linux-headers-&lt;Linux内核版本号&gt;  二.编写Makefile文件Makefile文件可以让我们">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/03/09/Introduction-to-Linux-Kernel-Modeles/picture1.png">
+<meta property="og:image" content="http://example.com/2022/03/09/Introduction-to-Linux-Kernel-Modeles/picture2.png">
+<meta property="og:image" content="http://example.com/2022/03/09/Introduction-to-Linux-Kernel-Modeles/picture3.png">
+<meta property="article:published_time" content="2022-03-09T13:05:33.000Z">
+<meta property="article:modified_time" content="2022-03-09T13:47:43.181Z">
+<meta property="article:author" content="Otsutsuki-orance">
+<meta property="article:tag" content="编程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2022/03/09/Introduction-to-Linux-Kernel-Modeles/picture1.png">
+  
+  
+  <title>Introduction to Linux Kernel Modeles - 愿岁并谢，与长友兮</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>万里蹀躞，以此为归</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Introduction to Linux Kernel Modeles">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-09 21:05" pubdate>
+        March 9, 2022 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      23 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Introduction to Linux Kernel Modeles</h1>
+            
+            <div class="markdown-body">
+              <h1 id="Linux-模块编写实践"><a href="#Linux-模块编写实践" class="headerlink" title="Linux 模块编写实践"></a>Linux 模块编写实践</h1><p>在Linux虚拟机上编写一个简单的模块并加载到内存中。之所以不用双系统是怕bug直接让系统崩溃</p>
+<h2 id="一-准备工作"><a href="#一-准备工作" class="headerlink" title="一.准备工作"></a>一.准备工作</h2><p>首先采用如下语句查看内核版本：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs css">uname -<span class="hljs-selector-tag">a</span><br></code></pre></td></tr></table></figure>
+
+<p>我的得到：</p>
+<img src="/2022/03/09/Introduction-to-Linux-Kernel-Modeles/picture1.png" srcset="/img/loading.gif" lazyload class="" title="准备工作">
+<p>之后要建立目录树，其语句为：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-builtin-name">get</span> install linux-headers-&lt;Linux内核版本号&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="二-编写Makefile文件"><a href="#二-编写Makefile文件" class="headerlink" title="二.编写Makefile文件"></a>二.编写Makefile文件</h2><p>Makefile文件可以让我们用简单的命令将.c文件编译成可被加载的.ko文件<br>我的Makefile文件的写法是：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">KERNELDIR ?=<span class="hljs-string">/lib/modules/</span>$<span class="hljs-params">(shell uname -r)</span><span class="hljs-string">/build</span><br>PWD :=$<span class="hljs-params">(shell pwd)</span><br>obj-m :=&lt;文件名称&gt;<span class="hljs-string">.o</span><br>all:<br>	make -C $<span class="hljs-params">(KERNELDIR)</span> M=$<span class="hljs-params">(PWD)</span> modules<br>clean:<br>	rm -rf *<span class="hljs-string">.o</span> *~core <span class="hljs-string">.depend</span> .*<span class="hljs-string">.cmd</span> *<span class="hljs-string">.ko</span> *<span class="hljs-string">.mod.c</span> <span class="hljs-string">.tmp_versions</span> *<span class="hljs-string">.mod</span> *<span class="hljs-string">.order</span> *<span class="hljs-string">.symvers</span><br></code></pre></td></tr></table></figure>
+
+<p>要编译其他的文件，只需要修改其中的文件名称即可<br>我们用：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">make</span><br></code></pre></td></tr></table></figure>
+
+<p>命令来编译，用：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">make clean</span><br></code></pre></td></tr></table></figure>
+
+<p>命令来清除中间产生的中间文件。</p>
+<h2 id="三-编写内核模块"><a href="#三-编写内核模块" class="headerlink" title="三.编写内核模块"></a>三.编写内核模块</h2><p>创建xxx.c文件，比如我们这里以seconds.c为例。该模块可以在读取的时候告诉你从他被加载已经过去了多久。代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/init.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/kernel.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/module.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/proc_fs.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;asm/uaccess.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/jiffies.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> PROC_FILE_NAME <span class="hljs-meta-string">&quot;seconds&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BUFFER_SIZE 128</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">volatile</span> ulv;<br>ulv begintime;<br><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">proc_read</span><span class="hljs-params">(struct file *file ,<span class="hljs-keyword">char</span> __user *user_buf,<span class="hljs-keyword">size_t</span> count,<span class="hljs-keyword">loff_t</span> *pos)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">int</span> rv = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">char</span> buffer[BUFFER_SIZE];<br>	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> completed=<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">if</span>(completed)<br>	&#123;<br>		completed=<span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br>	completed = <span class="hljs-number">1</span>;<br><br>        ulv curtime = (jiffies-begintime)/HZ;<br>	rv = <span class="hljs-built_in">sprintf</span>(buffer,<span class="hljs-string">&quot;the time passed is:%lu&quot;</span>,curtime);<br>	copy_to_user(user_buf,buffer,rv);<br>	<span class="hljs-keyword">return</span> rv;<br>&#125;;<br><span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc_ops</span> <span class="hljs-title">proc_ops</span> =</span>&#123;<br>	.proc_read = proc_read,<br>&#125;;<br><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> __init <span class="hljs-title">proc_init</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span><br><span class="hljs-function"></span>&#123;<br> proc_create(PROC_FILE_NAME,<span class="hljs-number">0x0666</span>,<span class="hljs-literal">NULL</span>,&amp;proc_ops);<br> begintime = jiffies;<br> <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> __exit <span class="hljs-title">proc_exit</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span><br><span class="hljs-function"></span>&#123;<br> remove_proc_entry(PROC_FILE_NAME,<span class="hljs-literal">NULL</span>);<br>&#125;<br>module_init(proc_init);<br>module_exit(proc_exit);<br>MODULE_LICENSE(<span class="hljs-string">&quot;GPL&quot;</span>);<br>MODULE_AUTHOR(<span class="hljs-string">&quot;Otsutsuki_Orance&quot;</span>);<br><br></code></pre></td></tr></table></figure>
+
+<p>对其做如下解读：</p>
+<h4 id="1-框架部分："><a href="#1-框架部分：" class="headerlink" title="1.框架部分："></a>1.框架部分：</h4><p>声明模块在加载时执行的函数，函数体为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> __init <span class="hljs-title">proc_init</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>声明模块在退出内核时执行的函数，函数体为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> __exit <span class="hljs-title">proc_exit</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>当然还有一些后摇：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c">module_init(proc_init);<br>module_exit(proc_exit);<br>MODULE_LICENSE(<span class="hljs-string">&quot;GPL&quot;</span>);<br>MODULE_AUTHOR(<span class="hljs-string">&quot;Otsutsuki_Orance&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-使用-proc文件系统"><a href="#2-使用-proc文件系统" class="headerlink" title="2.使用/proc文件系统"></a>2.使用/proc文件系统</h4><p>如果是正常的模块，写到这也就差不多了，我们只需要在函数中加入如下语句就可以在缓冲区查看输出了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">printk(KERN_INFO<span class="hljs-string">&quot;XXXX&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>用这个看：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">dmesg</span><br></code></pre></td></tr></table></figure>
+
+<p>但是这里我们用了/proc文件系统，他是内存中的伪文件系统(in-memory pseudo-file system)。该目录下保存的不是真正的文件和目录，而是一些“运行时”信息，如系统内存、磁盘io、设备挂载信息和硬件配置信息等。proc目录是一个控制中心，用户可以通过更改其中某些文件来改变内核的运行状态。</p>
+<p>那我们来控制一下</p>
+<p>首先它的逻辑是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">proc_create(PROC_FILE_NAME,<span class="hljs-number">0x0666</span>,<span class="hljs-literal">NULL</span>,&amp;proc_ops);<br></code></pre></td></tr></table></figure>
+
+<p>来创建一个/proc入口，其中PROC_FILE_NAME是可以在/proc/PROC_FILE_NAME找到的模块名，0x0666为权限，NULL为父目录名，设成NULL的话就是/proc，</p>
+<p>然后来谈proc_ops:<br>首先他是proc_ops类型（这里千万不要信恐龙书上的file_operation)<br>其次它里面可以声明：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">.proc_read = proc_read,<br></code></pre></td></tr></table></figure>
+
+<p>一个函数，我们执行cat  /proc/模块名时要干的事情，即怎么读；</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-title">.proc_write = proc_write</span><br></code></pre></td></tr></table></figure>
+
+<p>我们用echo  /proc/模块名 “内容”时要往内核内存中写的东西。<br>赋值右面的函数是要我们自己实现的，详情看代码。</p>
+<h2 id="三-导入模块"><a href="#三-导入模块" class="headerlink" title="三.导入模块"></a>三.导入模块</h2><p>用以下语句来加载模块：</p>
+<figure class="highlight bnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bnf">sudo insmod <span class="hljs-attribute">&lt;模块名&gt;</span>.ko<br></code></pre></td></tr></table></figure>
+
+<p>如图，在执行cat /proc/seconds后会告诉你时间</p>
+<img src="/2022/03/09/Introduction-to-Linux-Kernel-Modeles/picture2.png" srcset="/img/loading.gif" lazyload class="" title="读模块内容">
+<p>另外，在/sys/module/文件夹下也可以找到我们的模块：</p>
+<img src="/2022/03/09/Introduction-to-Linux-Kernel-Modeles/picture3.png" srcset="/img/loading.gif" lazyload class="" title="模块位置">
+
+<p>因此我们也可以用</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">ls <span class="hljs-regexp">/sys/m</span>odule/&lt;模块名&gt;<br></code></pre></td></tr></table></figure>
+
+<p>来读模块。<br>最后，用以下语句来卸载模块：</p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs erlang-repl">sudo rmmod &lt;模块名&gt;(没有.ko!!!)<br></code></pre></td></tr></table></figure>
+
+
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6/">计算机科学</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/09/UNIX-Shell-programming/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">UNIX Shell programming</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/01/pytorch%E9%A6%96%E6%88%98%E2%80%94%E2%80%94%E7%BA%BF%E6%80%A7%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/">
+                        <span class="hidden-mobile">pytorch首战——线性网络及其实现</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Otsutsuki_Orance</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>humihuadecheng@sjtu.edu.cn</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
