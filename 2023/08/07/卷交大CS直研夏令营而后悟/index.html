@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/flag.jpg">
+  <link rel="icon" href="/img/flag.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Otsutsuki-orance">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="人生中有些事情，一旦经历就永远不想再重新经历一遍，只能捧着回忆聊以自慰。 今年正常发挥，如愿考上上海交通大学就算一件。当然，三年前正常发挥，如愿考上上海交通大学也算另一件。 一卷子发下来了，散发着劣质油墨的腥臭，薄薄的一张纸，却重的连窗外灌进来的午后的风都吹不走。 我猛的深吸一口气，看到上面赫然一个丑陋的联通图，刹那间，左右两边键盘声四起，仿佛那些同学不是来考试，而是用夸张的力度和放肆的手法验证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷交大CS直研夏令营而后悟">
+<meta property="og:url" content="http://example.com/2023/08/07/%E5%8D%B7%E4%BA%A4%E5%A4%A7CS%E7%9B%B4%E7%A0%94%E5%A4%8F%E4%BB%A4%E8%90%A5%E8%80%8C%E5%90%8E%E6%82%9F/index.html">
+<meta property="og:site_name" content="愿岁并谢，与长友兮">
+<meta property="og:description" content="人生中有些事情，一旦经历就永远不想再重新经历一遍，只能捧着回忆聊以自慰。 今年正常发挥，如愿考上上海交通大学就算一件。当然，三年前正常发挥，如愿考上上海交通大学也算另一件。 一卷子发下来了，散发着劣质油墨的腥臭，薄薄的一张纸，却重的连窗外灌进来的午后的风都吹不走。 我猛的深吸一口气，看到上面赫然一个丑陋的联通图，刹那间，左右两边键盘声四起，仿佛那些同学不是来考试，而是用夸张的力度和放肆的手法验证">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/08/07/%E5%8D%B7%E4%BA%A4%E5%A4%A7CS%E7%9B%B4%E7%A0%94%E5%A4%8F%E4%BB%A4%E8%90%A5%E8%80%8C%E5%90%8E%E6%82%9F/1.jpg">
+<meta property="article:published_time" content="2023-08-07T14:58:45.000Z">
+<meta property="article:modified_time" content="2023-09-10T04:56:28.319Z">
+<meta property="article:author" content="Otsutsuki-orance">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2023/08/07/%E5%8D%B7%E4%BA%A4%E5%A4%A7CS%E7%9B%B4%E7%A0%94%E5%A4%8F%E4%BB%A4%E8%90%A5%E8%80%8C%E5%90%8E%E6%82%9F/1.jpg">
+  
+  
+  <title>卷交大CS直研夏令营而后悟 - 愿岁并谢，与长友兮</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>万里蹀躞，以此为归</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="卷交大CS直研夏令营而后悟">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-08-07 22:58" pubdate>
+        August 7, 2023 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      25 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">卷交大CS直研夏令营而后悟</h1>
+            
+            <div class="markdown-body">
+              <img src="/2023/08/07/%E5%8D%B7%E4%BA%A4%E5%A4%A7CS%E7%9B%B4%E7%A0%94%E5%A4%8F%E4%BB%A4%E8%90%A5%E8%80%8C%E5%90%8E%E6%82%9F/1.jpg" srcset="/img/loading.gif" lazyload class="">
+<p>人生中有些事情，一旦经历就永远不想再重新经历一遍，只能捧着回忆聊以自慰。</p>
+<p>今年正常发挥，如愿考上上海交通大学就算一件。当然，三年前正常发挥，如愿考上上海交通大学也算另一件。</p>
+<h1 id="一"><a href="#一" class="headerlink" title="一"></a>一</h1><p>卷子发下来了，散发着劣质油墨的腥臭，薄薄的一张纸，却重的连窗外灌进来的午后的风都吹不走。</p>
+<p>我猛的深吸一口气，看到上面赫然一个丑陋的联通图，刹那间，左右两边键盘声四起，仿佛那些同学不是来考试，而是用夸张的力度和放肆的手法验证着无限猴子定理。</p>
+<p>我心里想的却是，招生组妈妈生的，说好的第一道有手就行？</p>
+<h1 id="二"><a href="#二" class="headerlink" title="二"></a>二</h1><p>上海交通大学计算机系夏令营的备考，是我三年来经历过的最痛苦的事情没有之一，胜过于在yyu的数据结构上边哭边重打deque。</p>
+<p>期末考试过后，我跟一群打死都不直博的难兄难弟，就开始马不停蹄的准备机考了。与此同时，我还有一群打死不直研的兄弟，已经开始马不停蹄的出去旅游和放松追剧了。</p>
+<p>大家为什么要直博呢？我觉得很大程度上是因为，不想面对未知数最大的机考。</p>
+<p>洛夫。</p>
+<p>当然我自己也是洛夫，我不想面对以后焦头烂额写不出博士毕业论文。</p>
+<p>我的备考路径大约分为三个阶段，第一阶段叫做预习，我买来王道考研的机考专题，用来学习c++的基本知识。这一阶段非常愉快，因为题目基本上都是模版，旨在让自己找到感觉，能熟练的编写程序。</p>
+<p>在这一阶段，我遇到了救我命的题，浙江大学考研复试上机题，这道题直接让我在考试时浑身颤抖的情况下，仍然用强大的肌肉记忆和本能反应完成了程序的编写。</p>
+<p>这道题说的是，有一个强盗帮派，里面有大哥小弟，各自打电话，让你通过打电话时长来擒贼先擒王。聪明的你一定会想到，这是并查集的变种。</p>
+<p>但是因为有其他很多东西需要维护，所以细节很难实现，这种别扭的沟通方式，就像招生组不建群用邮件傻乎乎的传递消息一样。</p>
+<p>我在预习的时候跳过了这道题。考试前一天花了两个小时把它调通，结果拿到那张腥臭的试卷时发现，那个丑陋的图用的丑陋的实现方式，跟这玩意是一种思路。</p>
+<p>我不得不感叹命运的巧妙安排，试想头个晚上如果我没有沉下心来大用其功将其解决，估计已经在滚去直博的路上了。后来我听说，这道题难倒了很多人，包括在yyu的数据结构上教我如何打deque的L同学，因为其用字符串命名节点的方式实在恶心。</p>
+<p>一文钱难倒英雄汉。</p>
+<h1 id="三"><a href="#三" class="headerlink" title="三"></a>三</h1><p>我准备考试的第二个阶段，我将之称之为闭关。</p>
+<p>主图全媒体服务区的靠窗双显示屏的座位，成为了我不二的修炼场所。窗外是一棵大槐树，我每天都可以看到阳光洒在它的枝叶上在地上投下细碎的光斑，或者是下雨的时候被吹的哗啦啦响。</p>
+<p>槐树养阴，或许我有一天猝死在那里，魂魄可以成为它的一部分，在机考结束后转世投胎。当然我并没有猝死，因为那些每天从早卷到晚，图书馆闭馆了都要换了地方继续卷的同学都没有猝死。</p>
+<p>Z君就是这样的同学，有一天我对他说：早点回去吧，别卷了。</p>
+<p>他答道：卷嘛？我最不卷了。</p>
+<p>回头马上接到：我今天就看到11点半。</p>
+<p>你卷吧，卷死你。</p>
+<p>显然是卷不死的，而且Z君最后考的很好，直接AK后交早卷潇洒离场，这是后话。</p>
+<p>我当时的作息大概是，早上看例题，下午做练习，晚上复习一下思想，大概每天6～8小时的工作量，风雨无阻。</p>
+<p>一周后我就干不动了，跟着学院实践团报名一起混，在河南红旗渠玩了三天，</p>
+<h1 id="四"><a href="#四" class="headerlink" title="四"></a>四</h1><p>终于来到了冲刺阶段，面试机考混合双打。面试之前实验室全体同学被导师拉去训话，告诉我们一定要加以重视，夏令营凉了没有人会捞我们，自生自灭。</p>
+<p>然后意味深长的看了我一眼：特别是某些天天搞万花筒学生工作的同学，你那些经历在研究生一点用都没有。</p>
+<p>没有嘛？研究生会是什么东西？我受邀给博士生班级排练班风大赛合唱曲目又是什么东西？</p>
+<p>当然我说：我一定注意。</p>
+<p>这一天终于来了，我被安排在第一天面试。</p>
+<p>我盛装出席，西装领带皮鞋，成为了全场唯一一个热的中暑的小丑。</p>
+<p>前一个同学进去了，我在过道中等待。没有空调，我感觉自己进入到一种奇妙的境地，仿佛灵魂从身体中剥离出来，静静地俯视着紧张的自己。我并没有感觉到很热，只有不停涌出啦的汗水象征着我的下丘脑还在工作，说，这个孙子热了，快出汗。</p>
+<p>碰到招生组的老师，跟他打了个招呼，他用一半嘴角上扬微笑着问我：同学不热吗？</p>
+<p>我说，不热，紧张。</p>
+<p>我相信从那一刻起这个紧张的小丑在老师心里留下了印象，因为之后我在单位楼下在此跟他打招呼时他的眼里浮现出来一些异样的东西，仿佛是在思索，又仿佛在疑惑这位同学为什么会出现在这里。</p>
+<p>我还扯着嗓门为他指挥停车：盘子打死，倒，倒，回正，倒————倒不得了！</p>
+<h1 id="五"><a href="#五" class="headerlink" title="五"></a>五</h1><p>我想，我的运气很好。</p>
+<p>遇到了认识的老师，我一身正装终于有了一些作用。我瞟见她拿着手机给我拍照，夸我英语口语好。</p>
+<p>在学生会摸爬滚打了一年的基本礼仪也有了用武之地，简历多打印一份，给助理老师也发到；进门之后先站着，老师让你坐下时先环顾一圈鞠躬；回答问题前后都要来一句栓Q。</p>
+<p>认识我的老师也很够朋友，眼见着要问专业问题了，她说，我看时间差不多了，要不就到这里？</p>
+<p>然后一晃眼就来到了机考现场，第一题顺利做出来的时候我感觉到肾上腺素飙升，紧接着一股尿意喷涌而出，赶紧请假上厕所。之后第二题也通过了，那一刻我突然感觉到很饿，仿佛是关闭很久的某一道闸门突然打开，有一些积蓄很久的情感喷涌而出，然后肚子不争气的咕咕作响。那一刻，世界仿佛很安静，又仿佛很喧嚣，我好像看到了电风扇的扇叶转的很缓慢，阳光在墙上驻足，而我的眼睛像是进入林克时间一般聚精会神的注视着这一切。</p>
+<p>第三题过了四个点，满意了。</p>
+<p>能AK才怪，那就不是我干的出来的事儿。</p>
+<h1 id="六"><a href="#六" class="headerlink" title="六"></a>六</h1><p>当晚我和另外两位同学打球后聊了很久，在小吃街一杯又一杯点着冰鲜的柠檬水，就仿佛这过去的一切是别人的事情，我们只需要在这里聊天。</p>
+<p>想起这期间发生的一切事情，这些过往将会内化成为我的一部分，提醒着我我曾经有一个多月，拿出了全部的时间和精力认认真真的干好了一件事情，并且收获到了不错的结果。</p>
+<p>时光无言，功不唐捐，因上努力，果上随缘。</p>
+<p>我一直执拗的相信，命运会看到我自己的内心，然后，问问我自己觉得自己做的怎么样，并给我相应的结果。</p>
+<p>有时我会羞愧，比如回家三周啥也没干。</p>
+<p>有时我会反思，学生工作耽误科研了吗？大作业水了吗？课堂知识消化了吗？<br>更多的是平静的肯定：就是这样，一直走下去。</p>
+<p>毕竟我当了一年的学生会主席，每周那两天出来干万花筒的学生工作，课业成绩还是第一。</p>
+<p>小小的骄傲一波，然后收心，干好当下的事情。</p>
+<h1 id="七"><a href="#七" class="headerlink" title="七"></a>七</h1><p>以下是一些经验分享。</p>
+<p>夏令营的定位，是你可以通过考试和考核，获得保研流程中的接收方。其中，直研是硬卷，简历筛从2k到140，其中50多个学硕，30来个专硕，剩下的人滚去直博。</p>
+<p>回想起来，正确的策略是报名直研夏令营，然后用直博保底，因为这样选择的方向更多，至少不会没有书读。</p>
+<p>政策上，只要按时报名，提交材料，根据通知参加宣讲会和考试，整个流程非常简单，不会有什么东西。</p>
+<p>面试上，建议将自己的简历和项目用英文准备一份背熟。本校的同学一般不会被刁难。简历准备方面，大作业什么的都可以往上写，只要讲的出来。附加一笔带过的社会实践，展示你自己是一个全面发展的个体。</p>
+<p>机考准备上，我用的材料有四个：王道考研的机试指南，github上的leetcode101，leetcode上75题，以及牛客上的考研真题。</p>
+<p>剩下的，交给命运。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/04/%E6%88%91%E5%9B%9E%E6%9D%A5%E4%BA%86%EF%BC%81/">
+                        <span class="hidden-mobile">我回来了！</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Otsutsuki_Orance</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>humihuadecheng@sjtu.edu.cn</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
