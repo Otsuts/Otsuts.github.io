@@ -24,7 +24,7 @@
 <meta property="og:description" content="一个简单的shell编写在本项目中，我们编写了一个简单的壳程序，它只有执行命令，执行历史命令，使用管道，输出输入流定向等基本功能。但是它的编写却并不简单，我们现在来剖析一下。 一.总目标用户会输入一个字符串，我们的目标就是解析这个字符串（以空格划分）为命令和参数，存到一个二维char类型的数组args中，其中args[0]是命令，其余是参数。之后我们把它丢到 execvp函数里，这个函数长这样：">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-03-09T13:52:34.000Z">
-<meta property="article:modified_time" content="2022-03-09T14:30:56.875Z">
+<meta property="article:modified_time" content="2022-03-09T14:30:58.000Z">
 <meta property="article:author" content="Otsutsuki-orance">
 <meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary_large_image">
