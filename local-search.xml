@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>hexo博客新机迁移</title>
+    <link href="/2024/10/15/hexotransfer/"/>
+    <url>/2024/10/15/hexotransfer/</url>
+    
+    <content type="html"><![CDATA[<p>最近想把在自己mac mini上的hexo博客迁移到macbook上一份，记录一下全流程</p><h3 id="文件夹复制"><a href="#文件夹复制" class="headerlink" title="文件夹复制"></a>文件夹复制</h3><p>把项目全文件拷贝到目标文件夹即可</p><h3 id="安装nodejs和npm"><a href="#安装nodejs和npm" class="headerlink" title="安装nodejs和npm"></a>安装nodejs和npm</h3><p>在以下网站下载安装即可。并且安装好nodejs之后，npm也一并安装好了</p><p><a href="https://nodejs.org/zh-cn">https://nodejs.org/zh-cn</a></p><p>可以用以下命令查看是否安装成功</p><figure class="highlight crmsh"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs crmsh">npm -v<br><span class="hljs-keyword">node</span> <span class="hljs-title">-v</span><br></code></pre></td></tr></table></figure><h3 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h3><p>官网给的命令：</p><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">npm install -g hexo-<span class="hljs-keyword">cli</span><br></code></pre></td></tr></table></figure><p>但是我执行后直接卡住，于是寻求别的解决办法</p><p>更换npm镜像源：</p><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">npm config set registry https:<span class="hljs-comment">//registry.npm.taobao.org</span><br></code></pre></td></tr></table></figure><p>还是不行，上网查阅之后才发现该镜像源已经更新了，见<a href="https://blog.csdn.net/chaoPerson/article/details/136121885">https://blog.csdn.net/chaoPerson/article/details/136121885</a></p><p>当然，你可以用以下命令恢复和查看npm源：</p><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">npm config set registry https:<span class="hljs-comment">//registry.npmjs.org</span><br>npm config get registry<br></code></pre></td></tr></table></figure><p>执行以下命令后，换源成功，可以开始安装：</p><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">npm config set registry https:<span class="hljs-comment">//registry.npmmirror.com</span><br></code></pre></td></tr></table></figure><p>但是爆出权限问题，采用以下命令解决：</p><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs gams">mkdir ~/.npm-global<br>npm config <span class="hljs-keyword">set</span> prefix <span class="hljs-comment">&#x27;~/.npm-global&#x27;</span><br>export <span class="hljs-comment">PATH=</span>~/.npm-global/<span class="hljs-comment">bin:$PATH</span><br>vim ~/.profile<br>source ~/<span class="hljs-comment">.profile</span><br>sudo <span class="hljs-comment">chown -R 501:20</span> <span class="hljs-comment">&quot;/Users/chenjizheng/.npm&quot;</span><br>npm <span class="hljs-comment">install -g hexo-cli</span><br></code></pre></td></tr></table></figure><p>可以正常hexo new d g三连，但是如果新开一个终端，路径解析会有问题：<br><img src="1.jpg" alt="alt text"></p><p>需要把以下路径添加到环境变量中：</p><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-builtin-name">export</span> <span class="hljs-attribute">PATH</span>=~/.npm-global/bin:$PATH<br></code></pre></td></tr></table></figure><p>至此，结束</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机科学</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>随笔</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>卷交大CS直研夏令营而后悟</title>
     <link href="/2023/08/07/%E5%8D%B7%E4%BA%A4%E5%A4%A7CS%E7%9B%B4%E7%A0%94%E5%A4%8F%E4%BB%A4%E8%90%A5%E8%80%8C%E5%90%8E%E6%82%9F/"/>
     <url>/2023/08/07/%E5%8D%B7%E4%BA%A4%E5%A4%A7CS%E7%9B%B4%E7%A0%94%E5%A4%8F%E4%BB%A4%E8%90%A5%E8%80%8C%E5%90%8E%E6%82%9F/</url>
